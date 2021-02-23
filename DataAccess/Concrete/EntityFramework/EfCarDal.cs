@@ -30,10 +30,6 @@ namespace DataAccess.Concrete.EntityFramework
                                  ColorName = color.Name,
                                  DailyPrice = car.DailyPrice
                              };
-                if (result == null)
-                {
-                    Console.WriteLine("Eşleşen kayıt yok...");
-                }
                 return result.ToList();
             }
         }

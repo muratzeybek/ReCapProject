@@ -6,6 +6,8 @@ using DataAccess.Concrete.EntityFramework;
 using DataAccess.Concrete.InMemory;
 using Entities.Concrete;
 using System;
+using Core.Utilities.Results;
+using System.Collections.Generic;
 
 namespace ConsoleUI
 {
@@ -13,24 +15,24 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            // GetCar();
+            GetCar();
             // AddColorBrand();
             // UpdateColorBrand();
             // DeleteColorBrand();
 
-            GetCarDetails();
+            // GetCarDetails();
 
         }
 
-        private static void GetCarDetails()
-        {
-            ICarService carManager = new CarManager(new EfCarDal());
-            foreach (var cars in carManager.GetCarDetail())
-            {
-                Console.WriteLine(cars.CarName + "   " + cars.BrandName + " " + cars.ColorName + "   " + cars.DailyPrice + "TL   ");
-                Console.WriteLine("--------------------------------------------------------");
-            }
-        }
+        //private static void GetCarDetails()
+        //{
+        //    ICarService carManager = new CarManager(new EfCarDal());
+        //    foreach (var cars in carManager.GetCarDetails())
+        //    {
+        //        Console.WriteLine(cars.CarName + "   " + cars.BrandName + " " + cars.ColorName + "   " + cars.DailyPrice + "TL   ");
+        //        Console.WriteLine("--------------------------------------------------------");
+        //    }
+        //}
 
         private static void DeleteColorBrand()
         {
@@ -62,8 +64,10 @@ namespace ConsoleUI
         {
             // Color Add Testing
             IColorService colorManager = new ColorManager(new EfColorDal());
-            colorManager.Add(new Color { Id = 1, Name = "Beyaz" });
-            colorManager.Add(new Color { Id = 2, Name = "Beyaz" });
+
+
+            colorManager.Add(new Color { Id = 3, Name = "Siyah" });
+            colorManager.Add(new Color { Id = 4, Name = "Turkuaz" });
             Console.WriteLine("Renk kaydedildi...");
 
             // Brand Add Testing
@@ -76,11 +80,23 @@ namespace ConsoleUI
         private static void GetCar()
         {
             ICarService carManager = new CarManager(new EfCarDal());
-            foreach (var cars in carManager.GetAll())
+
+            IDataResult<List<Car>> carData = carManager.GetAll();
+
+            if (carData.Data == null)
             {
-                Console.WriteLine(cars.Id + "   " + cars.ColorId + " " + cars.ModelYear + "   " + cars.DailyPrice + "TL   " + cars.Description);
-                Console.WriteLine("--------------------------------------------------------");
+                Console.WriteLine("NULL DEĞER DÖNDÜ");
             }
+            else
+            {
+                foreach (var cars in carData.Data)
+                {
+                    Console.WriteLine(cars.ModelYear + "   " + cars.DailyPrice + "TL   " + cars.Description);
+                    Console.WriteLine("--------------------------------------------------------");
+                }
+            }
+            Console.WriteLine(carData.Message);
+
         }
     }
 }
