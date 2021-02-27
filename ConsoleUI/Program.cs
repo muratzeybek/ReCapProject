@@ -1,5 +1,4 @@
 ﻿using DataAccess.Abstract;
-
 using Business.Abstract;
 using Business.Concrete;
 using DataAccess.Concrete.EntityFramework;
@@ -15,24 +14,46 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            GetCar();
+            // GetCar();
             // AddColorBrand();
             // UpdateColorBrand();
             // DeleteColorBrand();
 
             // GetCarDetails();
 
+            IRentalService rentalService = new RentalManager(new EfRentalDal());
+            var result = rentalService.Add(new Rental { Id = 2, CarId = 1, CustomerId = 1, RentalDate = new DateTime(2021, 02, 27), ReturnDate = new DateTime(2021, 03, 01) });
+
+            if (result.Success)
+            {
+                Console.WriteLine(result.Message);
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
         }
 
-        //private static void GetCarDetails()
-        //{
-        //    ICarService carManager = new CarManager(new EfCarDal());
-        //    foreach (var cars in carManager.GetCarDetails())
-        //    {
-        //        Console.WriteLine(cars.CarName + "   " + cars.BrandName + " " + cars.ColorName + "   " + cars.DailyPrice + "TL   ");
-        //        Console.WriteLine("--------------------------------------------------------");
-        //    }
-        //}
+        // ************************************************************
+        private static void GetCarDetails()
+        {
+            ICarService carManager = new CarManager(new EfCarDal());
+
+            var result = carManager.GetCarDetails();
+
+            if (result.Success)
+            {
+                foreach (var cars in carManager.GetCarDetails().Data)
+                {
+                    Console.WriteLine(cars.CarName + "   " + cars.BrandName + " " + cars.ColorName + "   " + cars.DailyPrice + "TL   ");
+                    Console.WriteLine("--------------------------------------------------------");
+                }
+            }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+        }
 
         private static void DeleteColorBrand()
         {
@@ -96,7 +117,6 @@ namespace ConsoleUI
                 }
             }
             Console.WriteLine(carData.Message);
-
         }
     }
 }

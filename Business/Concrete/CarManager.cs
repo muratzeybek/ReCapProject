@@ -40,7 +40,7 @@ namespace Business.Concrete
 
         public IDataResult <List<Car>> GetAll()
         {
-            return new DataResult<List<Car>>( _carDal.GetAll(),true, Messages.AllDataList);
+            return new SuccessDataResult<List<Car>>( _carDal.GetAll());
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
