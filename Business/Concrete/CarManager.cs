@@ -48,15 +48,11 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.DataList);
         }
 
-        public IDataResult <List<Car>> GetCarsByBrandId(int id)
+        public IDataResult <List<Car>> GetById(int id)
         {
-            return new DataResult<List<Car>>(_carDal.GetAll(p => p.BrandId == id),true, Messages.AllDataList);
+            return new DataResult<List<Car>>(_carDal.GetAll(p => p.Id == id),true, Messages.AllDataList);
         }
 
-        public IDataResult <List<Car>> GetCarsByColorId(int id)
-        {
-            return new DataResult<List<Car>>(_carDal.GetAll(p => p.ColorId == id),true);
-        }
 
         public IResult Update(Car car)
         {
