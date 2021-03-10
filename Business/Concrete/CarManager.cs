@@ -1,9 +1,12 @@
 ﻿using Business.Abstract;
 using Business.Constans;
+using Business.ValidationRules.FluentValidation;
+using Core.CrossCuttingConcerns.Validation.FluentValidation;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using Entities.DTOs;
+using FluentValidation;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,16 +24,9 @@ namespace Business.Concrete
 
         public IResult Add(Car car)
         {
-            if (car.Description.Length>2 && car.DailyPrice>0)
-            {
-                _carDal.Add(car);
-                return new Result(true, Messages.DataAdded);
-            }
-            else
-            {
-                Console.WriteLine("Araç adı çok kısa yada günlük kira bedeli yok.");
-                return new Result(false);
-            }
+            ValidationTool.Validate(new CarValidator(), car);
+            _carDal.Add(car);
+            return new Result(true, Messages.DataAdded);
         }
 
         public IResult Delete(Car car)
@@ -38,9 +34,9 @@ namespace Business.Concrete
             return new ErrorResult("No command.");
         }
 
-        public IDataResult <List<Car>> GetAll()
+        public IDataResult<List<Car>> GetAll()
         {
-            return new SuccessDataResult<List<Car>>( _carDal.GetAll());
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll());
         }
 
         public IDataResult<List<CarDetailDto>> GetCarDetails()
@@ -48,9 +44,9 @@ namespace Business.Concrete
             return new SuccessDataResult<List<CarDetailDto>>(_carDal.GetCarDetails(), Messages.DataList);
         }
 
-        public IDataResult <List<Car>> GetById(int id)
+        public IDataResult<List<Car>> GetById(int id)
         {
-            return new DataResult<List<Car>>(_carDal.GetAll(p => p.Id == id),true, Messages.AllDataList);
+            return new DataResult<List<Car>>(_carDal.GetAll(p => p.Id == id), true, Messages.AllDataList);
         }
 
 
